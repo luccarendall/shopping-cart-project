@@ -1,3 +1,4 @@
+const sectionPai = document.querySelector('.items');
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -18,7 +19,10 @@ function createProductItemElement({ sku, name, image }) {
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
+  const qualyImage = image.split('-');
+  if (qualyImage[2].includes('I')) qualyImage[2] = 'J.jpg';
+  const highImage = `${qualyImage[0]}-${qualyImage[1]}-${qualyImage[2]}`;
+  section.appendChild(createProductImageElement(highImage));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
@@ -40,4 +44,15 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+const prodSection = () => {
+  const obj = {};
+  fetchProducts('computador').then((results) => results.forEach(({ id, title, thumbnail }) => {
+      obj.sku = id;
+      obj.name = title;
+      obj.image = thumbnail; 
+      sectionPai.appendChild(createProductItemElement(obj));
+    }));
+};
+window.onload = () => {
+  prodSection();
+ };
