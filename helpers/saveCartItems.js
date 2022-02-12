@@ -1,5 +1,6 @@
-const saveCartItems = (event) => {
-  const elementString = JSON.stringify(event);
+const saveCartItems = (element) => {
+  if (element === 'limpar') return localStorage.clear();
+  const elementString = JSON.stringify(element);
   return localStorage.setItem('cartItems', elementString);
 };
 
