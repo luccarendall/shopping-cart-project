@@ -1,7 +1,11 @@
 const fetchItem = async (item) => {
-  const response = await fetch(`https://api.mercadolibre.com/items/${item}`);
-  const results = await response.json();
-  return results;
+  try {
+    const response = await fetch(`https://api.mercadolibre.com/items/${item}`);
+    const results = await response.json();
+    return results;
+  } catch (error) {
+    return error;
+  }
 };
 
 if (typeof module !== 'undefined') {
