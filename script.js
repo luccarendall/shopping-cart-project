@@ -28,6 +28,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// eslint-disable-next-line no-unused-vars
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -36,14 +37,17 @@ function cartItemClickListener(event) {
   const clickListener = event.target;
   clickListener.remove();
 }
+cartItemClickListener();
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', createCartItemElement);
   return li;
 }
+
+createCartItemElement();
 
 const prodSection = () => {
   const obj = {};
