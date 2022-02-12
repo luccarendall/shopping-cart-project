@@ -28,10 +28,10 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// eslint-disable-next-line no-unused-vars
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+getSkuFromProductItem();
 
 function cartItemClickListener(event) {
   const clickListener = event.target;
