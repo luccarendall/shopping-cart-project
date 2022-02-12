@@ -31,23 +31,19 @@ function createProductItemElement({ sku, name, image }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-getSkuFromProductItem();
 
 function cartItemClickListener(event) {
   const clickListener = event.target;
   clickListener.remove();
 }
-cartItemClickListener();
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', createCartItemElement);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
-
-createCartItemElement();
 
 const prodSection = () => {
   const obj = {};
