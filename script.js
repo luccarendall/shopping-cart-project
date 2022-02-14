@@ -154,4 +154,10 @@ clearCart.addEventListener('click', () => {
   getSaved();
   sumItemsCart();
 
+  function hiddenLoading() {
+    getLoading.remove();
+  }
+
+  hiddenLoading();
+  
   window.onload = () => { };
