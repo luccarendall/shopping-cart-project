@@ -1,7 +1,16 @@
 let arrMyCart = [];
 const olCart = document.querySelector('.cart__items');
 const clearCart = document.querySelector('.empty-cart');
+const valueTotal = document.querySelector('.total-price');
+const load = document.querySelector('.loading');
+const items = document.querySelector('.items');
+let savedItemsOfCart = [];
 // const { fetchItem } = require("./helpers/fetchItem");
+const cart = document.querySelector('.cart');
+const p = document.createElement('p');
+p.className = 'total-price';
+cart.appendChild(p);
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -9,10 +18,24 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+const sumItemsCart = () => {
+  let total = 0;
+  valueTotal.innerText = 0;
+  console.log(arrMyCart);
+  for (let index = 0; index < arrMyCart.length; index += 1) {
+    total += arrMyCart[index].price;
+  }
+  valueTotal.innerText = total;
+};
+
 function cartItemClickListener(event) {
+  const idDeleted = event.target.innerText.split(' ')[1];
   event.target.remove();
-  const teste = arrMyCart.filter((ele) => ele.id !== event.target.id);
-  saveCartItems(teste);
+  const newSavedItemsOfCart = savedItemsOfCart.filter((item) => item.id !== idDeleted);
+  savedItemsOfCart.splice(-1, 1);
+  saveCartItems(JSON.stringify(savedItemsOfCart));
+  const sum = newSavedItemsOfCart.reduce((acc, item) => acc + item.price, 0.00);
+  p.innerText = `${parseFloat(sum.toFixed(2))}`;
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -22,6 +45,21 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+async function addItemToCart(event) {
+  const id = event.target.parentNode.children[0].innerText;
+  const addItem = await fetchItem(id);
+  list.appendChild(createCartItemElement(addItem));
+  savedItemsOfCart.push(addItem);
+   saveCartItems(JSON.stringify(savedItemsOfCart));
+   const sum = savedItemsOfCart.reduce((acc, item) => acc + item.price, 0.00);
+   p.innerText = `${parseFloat(sum.toFixed(2))}`;
+} if (itemsCart) { 
+  savedItemsOfCart = itemsCart; // reatribui o array 
+  itemsCart.forEach((item) => {
+    list.appendChild(createCartItemElement(item));
+  });
 }
 
 function createCustomElement(element, className, innerText, ident) {
@@ -38,6 +76,7 @@ function createCustomElement(element, className, innerText, ident) {
         arrMyCart.push(item);
         console.log(arrMyCart);
         saveCartItems(arrMyCart);
+        sumItemsCart();
     });
   }
   return e;
@@ -68,9 +107,22 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 //   };
 // };
 
+const loading = (req) => {
+  const div = document.createElement('div');
+  div.innerText = 'loading...';
+  div.className = 'loading';
+  items.appendChild(div);
+  if (req === false) {
+    items.innerHTML = '';
+    console.log('entrou');
+  }
+};
+
 const addProductsScreen = async () => {
+  loading(true);
     const item = document.querySelector('.items');
     const { results } = await fetchProducts('computador');
+    loading(false);
   results.forEach((obje) => {
     item.appendChild(createProductItemElement(obje));
   });
@@ -89,12 +141,15 @@ const getSaved = () => {
   }
 };
 
-clearCart.addEventListener('click', (element) => {
+clearCart.addEventListener('click', () => {
   saveCartItems('limpar');
   olCart.innerHTML = '';
+  arrMyCart = [];
+  valueTotal.innerText = 0;
 });
 
   addProductsScreen();
   getSaved();
+  sumItemsCart();
 
   window.onload = () => { };
