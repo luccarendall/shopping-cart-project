@@ -62,6 +62,8 @@ async function addItemToCart(event) {
   });
 }
 
+addItemToCart();
+
 function createCustomElement(element, className, innerText, ident) {
   // const olCart = document.querySelector('.cart__items');
   const e = document.createElement(element);
