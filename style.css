@@ -130,7 +130,7 @@ body {
 .cart {
   display: flex;
   flex-basis: 32%;
-  flex-flow: column wrap;
+  flex-flow: column;
   background-color: rgb(241, 241, 238);
   height: 100vh;
 }
